@@ -127,7 +127,9 @@ class BottomBar extends StatelessWidget {
                         style: const ButtonStyle(
                             backgroundColor:
                                 MaterialStatePropertyAll(Color(0xff72B4F7))),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).pushNamed('/test');
+                        },
                         child: const Text(
                           'Iniciar',
                           style: TextStyle(

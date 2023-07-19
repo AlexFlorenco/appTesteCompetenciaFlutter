@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:teste_competencia_flutter/test.dart';
 
 import 'home_page.dart';
 
@@ -10,7 +11,11 @@ class TesteCompetencia extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: const HomePage(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const HomePage(),
+        '/test': (context) => const Test()
+      },
       theme: ThemeData(
         useMaterial3: true,
         fontFamily: 'Helvetica',
