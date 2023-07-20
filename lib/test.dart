@@ -62,9 +62,6 @@ class _AnswersState extends State<Answers> {
           Column(
             children: [
               const ButtonAnswer(),
-              const ButtonAnswer(),
-              const ButtonAnswer(),
-              const ButtonAnswer(),
               Container(
                 margin: const EdgeInsets.only(top: 16),
                 width: MediaQuery.of(context).size.width,
@@ -81,26 +78,73 @@ class _AnswersState extends State<Answers> {
   }
 }
 
-class ButtonAnswer extends StatelessWidget {
+class ButtonAnswer extends StatefulWidget {
   const ButtonAnswer({super.key});
+
+  @override
+  State<ButtonAnswer> createState() => _ButtonAnswerState();
+}
+
+class _ButtonAnswerState extends State<ButtonAnswer> {
+  int _selectedIndex = -1;
+
+  List<Widget> _buildButtons() {
+    List<Widget> buttons = [];
+    for (int i = 0; i < 4; i++) {
+      buttons.add(
+        Container(
+          margin: const EdgeInsets.only(bottom: 8),
+          width: MediaQuery.of(context).size.width - 32,
+          height: 57,
+          child: TextButton(
+            onPressed: () {
+              setState(() {
+                _selectedIndex = i;
+              });
+            },
+            style: ButtonStyle(
+              shape: MaterialStatePropertyAll(
+                RoundedRectangleBorder(
+                    side: _selectedIndex == i
+                        ? const BorderSide(color: Colors.green)
+                        : BorderSide.none,
+                    borderRadius: BorderRadius.circular(10)),
+              ),
+              foregroundColor: const MaterialStatePropertyAll(Colors.white),
+              alignment: Alignment.centerLeft,
+              backgroundColor:
+                  const MaterialStatePropertyAll(Color(0xFF1C2226)),
+            ),
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: Icon(
+                    _selectedIndex == i
+                        ? Icons.trip_origin
+                        : Icons.circle_outlined,
+                    color:
+                        _selectedIndex == i ? (Colors.green) : (Colors.white),
+                    fill: 1.0,
+                  ),
+                ),
+                const Text('border-corner: 10px;'),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+    return buttons;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       width: MediaQuery.of(context).size.width - 32,
-      height: 57,
-      child: TextButton.icon(
-        style: ButtonStyle(
-          shape: MaterialStatePropertyAll(
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
-          foregroundColor: const MaterialStatePropertyAll(Colors.white),
-          alignment: Alignment.centerLeft,
-          backgroundColor: const MaterialStatePropertyAll(Color(0xFF1C2226)),
-        ),
-        onPressed: () {},
-        icon: const Icon(Icons.circle),
-        label: const Text('border-corner: 10px;'),
+      child: Column(
+        children: _buildButtons(),
       ),
     );
   }
