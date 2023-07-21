@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:teste_competencia_flutter/test.dart';
+import 'package:teste_competencia_flutter/test_page/test.dart';
 
 class TestPage extends StatelessWidget {
   const TestPage({super.key});
@@ -7,7 +7,7 @@ class TestPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: const Color(0xFF1E2226),
+        backgroundColor: Colors.black,
         appBar: AppBar(
           leading: IconButton(
               icon: const Icon(Icons.close, color: Colors.white),
@@ -19,7 +19,7 @@ class TestPage extends StatelessWidget {
             style: TextStyle(color: Colors.white),
           ),
           toolbarHeight: 52,
-          forceMaterialTransparency: true,
+          forceMaterialTransparency: false,
           backgroundColor: const Color(0xFF1E2226),
         ),
         body: const Test());

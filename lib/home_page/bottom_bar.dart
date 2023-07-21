@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:teste_competencia_flutter/modal_acessibilidade.dart';
+import 'modal_acessibilidade.dart';
 
 class BottomBar extends StatelessWidget {
   const BottomBar({super.key});

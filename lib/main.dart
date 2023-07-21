@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:teste_competencia_flutter/test_page.dart';
+import 'package:teste_competencia_flutter/test_page/test_page.dart';
 
-import 'home_page.dart';
+import 'home_page/home_page.dart';
 
 void main() => runApp(const TesteCompetencia());
 
