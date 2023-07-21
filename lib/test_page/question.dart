@@ -9,10 +9,10 @@ class Question extends StatelessWidget {
     return Container(
       color: const Color(0xFF1E2226),
       width: MediaQuery.of(context).size.width,
-      padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
+      padding: const EdgeInsets.fromLTRB(20, 14, 20, 18),
       child: Text(
         pergunta,
-        style: const TextStyle(fontSize: 18),
+        style: const TextStyle(fontSize: 16, height: 1.25),
       ),
     );
   }
