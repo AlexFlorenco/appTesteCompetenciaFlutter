@@ -13,6 +13,10 @@ class TestPage extends StatefulWidget {
 class _TestPageState extends State<TestPage> {
   var selectedQuestion = 0;
   int? selectedButton;
+  var nextQuestion = false;
+  var numberQuestion = 1;
+  int? userResponse;
+
   @override
   Widget build(BuildContext context) {
     void avancar() {
@@ -31,10 +35,12 @@ class _TestPageState extends State<TestPage> {
           'Uma biblioteca de códigos pré-prontos para facilitar o projeto',
           'Uma plataforma de hospedagem de aplicativos na nuvem'
         ],
+        'correct': 'Uma linguagem de programação criada pela Google',
       },
       {
         'question': 'Qual linguagem o Flutter utiliza?',
         'answers': ['Java', '.net', 'Dart', 'Javacript'],
+        'correct': 'Dart',
       },
       {
         'question': 'Quais são as principais vantagens do Flutter?',
@@ -44,6 +50,7 @@ class _TestPageState extends State<TestPage> {
           'Ambas as opções anteriores',
           'Nenhuma das opções anteriores'
         ],
+        'correct': 'Ambas as opções anteriores',
       },
       {
         'question': 'Quais plataformas o Flutter suporta?',
@@ -53,9 +60,11 @@ class _TestPageState extends State<TestPage> {
           'Android, iOS, web e desktop',
           'Android, iOS, web, desktop e dispositivos embarcados'
         ],
+        'correct': 'Android, iOS, web e desktop',
       },
     ];
     List<String> answersString = teste[selectedQuestion].cast()['answers'];
+
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -91,7 +100,9 @@ class _TestPageState extends State<TestPage> {
                             onClick: () {
                               setState(() {
                                 selectedButton = i;
+                                nextQuestion = true;
                               });
+                              userResponse = i;
                             },
                             selected: i == selectedButton),
                     ],
@@ -111,7 +122,7 @@ class _TestPageState extends State<TestPage> {
           children: [
             Row(
               children: [
-                const Text('P1/15'),
+                Text('P$numberQuestion/15'),
                 const SizedBox(
                   height: 24,
                   child: VerticalDivider(
@@ -123,16 +134,35 @@ class _TestPageState extends State<TestPage> {
                 const Text('01:24 restantes'),
                 const Spacer(),
                 TextButton(
-                  style: const ButtonStyle(
-                      backgroundColor:
-                          MaterialStatePropertyAll(Color(0xff72B4F7))),
-                  onPressed: avancar,
-                  child: const Text(
+                  style: ButtonStyle(
+                    backgroundColor: nextQuestion
+                        ? const MaterialStatePropertyAll(Color(0xff72B4F7))
+                        : const MaterialStatePropertyAll(Color(0xFF393C40)),
+                  ),
+                  onPressed: nextQuestion
+                      ? () {
+                          if (selectedQuestion < 3) {
+                            if (teste[selectedQuestion].cast()['answers']
+                                    [userResponse] ==
+                                teste[selectedQuestion].cast()['correct']) {
+                              print('Correta');
+                            }
+                            avancar();
+                            nextQuestion = false;
+                            numberQuestion++;
+                          } else {
+                            null;
+                          }
+                        }
+                      : null,
+                  child: Text(
                     'Avançar',
                     style: TextStyle(
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w600,
                         fontSize: 16,
-                        color: Colors.black),
+                        color: nextQuestion
+                            ? const Color(0xFF1D3C5C)
+                            : const Color(0xFF75797E)),
                   ),
                 ),
               ],
