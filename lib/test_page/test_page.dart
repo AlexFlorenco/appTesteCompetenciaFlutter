@@ -19,6 +19,7 @@ class _TestPageState extends State<TestPage> {
   var nextQuestion = false;
   var numberQuestion = 1;
   int? userResponse;
+  int correctAnswers = 0;
   final GlobalKey<CountdownTimerState> _timerKey = GlobalKey();
 
   @override
@@ -98,7 +99,39 @@ class _TestPageState extends State<TestPage> {
                     width: 20,
                   ),
                 ),
-                CountdownTimer(key: _timerKey, seconds: 90),
+                CountdownTimer(
+                    key: _timerKey,
+                    seconds: 1,
+                    onFinished: () {
+                      if (selectedQuestion < 14) {
+                        if (userResponse != null) {
+                          if (teste[selectedQuestion].cast()['answers']
+                                  [userResponse] ==
+                              teste[selectedQuestion].cast()['correct']) {
+                            correctAnswers++;
+                            print('Acertou');
+                          } else {
+                            print('Errou');
+                          }
+                        } else {
+                          print('Não respondeu');
+                        }
+                        print('Respostas corretas: $correctAnswers');
+                        avancar();
+                        userResponse = null;
+                        nextQuestion = false;
+                        numberQuestion++;
+                        _timerKey.currentState?.reset();
+                      } else if (selectedQuestion == 14) {
+                        Navigator.pushReplacementNamed(context, '/result');
+                        if (correctAnswers > 10) {
+                          print('Parabéns! Você ficou entre os 30% melhores');
+                        } else {
+                          print('Infelizmente você não atingiu a meta');
+                        }
+                        print('Total de acertos: $correctAnswers');
+                      }
+                    }),
                 const Spacer(),
                 TextButton(
                   style: ButtonStyle(
