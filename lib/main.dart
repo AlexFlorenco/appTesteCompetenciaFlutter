@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:teste_competencia_flutter/result_page/result_page.dart';
 import 'package:teste_competencia_flutter/test_page/test_page.dart';
 
 import 'home_page/home_page.dart';
@@ -14,7 +15,8 @@ class TesteCompetencia extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const HomePage(),
-        '/test': (context) => const TestPage()
+        '/test': (context) => const TestPage(),
+        '/result': (context) => const ResultPage(),
       },
       theme: ThemeData(
         useMaterial3: true,
