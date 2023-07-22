@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:teste_competencia_flutter/test_page/answer.dart';
 import 'package:teste_competencia_flutter/test_page/question.dart';
+import 'package:teste_competencia_flutter/test_page/test_questions.dart';
+
+import 'countdown_timer.dart';
 
 class TestPage extends StatefulWidget {
   const TestPage({super.key});
@@ -16,6 +19,7 @@ class _TestPageState extends State<TestPage> {
   var nextQuestion = false;
   var numberQuestion = 1;
   int? userResponse;
+  final GlobalKey<CountdownTimerState> _timerKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -26,43 +30,6 @@ class _TestPageState extends State<TestPage> {
       });
     }
 
-    final teste = [
-      {
-        'question': 'O que é o Flutter?',
-        'answers': [
-          'Uma linguagem de programação criada pela Google',
-          'Uma ferramenta de desenvolvimento multiplataforma para dispositivos móveis',
-          'Uma biblioteca de códigos pré-prontos para facilitar o projeto',
-          'Uma plataforma de hospedagem de aplicativos na nuvem'
-        ],
-        'correct': 'Uma linguagem de programação criada pela Google',
-      },
-      {
-        'question': 'Qual linguagem o Flutter utiliza?',
-        'answers': ['Java', '.net', 'Dart', 'Javacript'],
-        'correct': 'Dart',
-      },
-      {
-        'question': 'Quais são as principais vantagens do Flutter?',
-        'answers': [
-          'Versatilidade, menor curva de aprendizado e agilidade',
-          'Performance nativa, design personalizado e hot reload',
-          'Ambas as opções anteriores',
-          'Nenhuma das opções anteriores'
-        ],
-        'correct': 'Ambas as opções anteriores',
-      },
-      {
-        'question': 'Quais plataformas o Flutter suporta?',
-        'answers': [
-          'Android e iOS',
-          'Android, iOS e web',
-          'Android, iOS, web e desktop',
-          'Android, iOS, web, desktop e dispositivos embarcados'
-        ],
-        'correct': 'Android, iOS, web e desktop',
-      },
-    ];
     List<String> answersString = teste[selectedQuestion].cast()['answers'];
 
     return Scaffold(
@@ -131,7 +98,7 @@ class _TestPageState extends State<TestPage> {
                     width: 20,
                   ),
                 ),
-                const Text('01:24 restantes'),
+                CountdownTimer(key: _timerKey, seconds: 90),
                 const Spacer(),
                 TextButton(
                   style: ButtonStyle(
@@ -141,7 +108,7 @@ class _TestPageState extends State<TestPage> {
                   ),
                   onPressed: nextQuestion
                       ? () {
-                          if (selectedQuestion < 3) {
+                          if (selectedQuestion < 14) {
                             if (teste[selectedQuestion].cast()['answers']
                                     [userResponse] ==
                                 teste[selectedQuestion].cast()['correct']) {
@@ -150,6 +117,7 @@ class _TestPageState extends State<TestPage> {
                             avancar();
                             nextQuestion = false;
                             numberQuestion++;
+                            _timerKey.currentState?.reset();
                           } else {
                             null;
                           }
