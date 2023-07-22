@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 
 class CountdownTimer extends StatefulWidget {
   final int seconds;
+  final VoidCallback? onFinished;
 
-  const CountdownTimer({super.key, required this.seconds});
+  const CountdownTimer({super.key, required this.seconds, this.onFinished});
 
   @override
   CountdownTimerState createState() => CountdownTimerState();
@@ -34,6 +35,9 @@ class CountdownTimerState extends State<CountdownTimer> {
           _remainingSeconds = _remainingSeconds! - 1;
         } else {
           _timer?.cancel();
+          if (widget.onFinished != null) {
+            widget.onFinished!();
+          }
         }
       });
     });
