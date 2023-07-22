@@ -101,7 +101,7 @@ class _TestPageState extends State<TestPage> {
                 ),
                 CountdownTimer(
                     key: _timerKey,
-                    seconds: 1,
+                    seconds: 5,
                     onFinished: () {
                       if (selectedQuestion < 14) {
                         if (userResponse != null) {
@@ -123,13 +123,13 @@ class _TestPageState extends State<TestPage> {
                         numberQuestion++;
                         _timerKey.currentState?.reset();
                       } else if (selectedQuestion == 14) {
-                        Navigator.pushReplacementNamed(context, '/result');
                         if (correctAnswers > 10) {
-                          print('Parabéns! Você ficou entre os 30% melhores');
+                          Navigator.pushReplacementNamed(context, '/result',
+                              arguments: true);
                         } else {
-                          print('Infelizmente você não atingiu a meta');
+                          Navigator.pushReplacementNamed(context, '/result',
+                              arguments: false);
                         }
-                        print('Total de acertos: $correctAnswers');
                       }
                     }),
                 const Spacer(),
@@ -145,14 +145,26 @@ class _TestPageState extends State<TestPage> {
                             if (teste[selectedQuestion].cast()['answers']
                                     [userResponse] ==
                                 teste[selectedQuestion].cast()['correct']) {
-                              print('Correta');
+                              correctAnswers++;
+                              print('Acertou');
+                            } else {
+                              print('Errou');
                             }
+
+                            print('Respostas corretas: $correctAnswers');
                             avancar();
+                            userResponse = null;
                             nextQuestion = false;
                             numberQuestion++;
                             _timerKey.currentState?.reset();
-                          } else {
-                            null;
+                          } else if (selectedQuestion == 14) {
+                            if (correctAnswers > 10) {
+                              Navigator.pushReplacementNamed(context, '/result',
+                                  arguments: true);
+                            } else {
+                              Navigator.pushReplacementNamed(context, '/result',
+                                  arguments: false);
+                            }
                           }
                         }
                       : null,
