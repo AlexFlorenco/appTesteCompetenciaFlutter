@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:teste_competencia_flutter/colors/colors.dart';
 
 import 'bottom_bar.dart';
 import 'description_test.dart';
@@ -10,35 +11,22 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1E2226),
+      backgroundColor: bgPrimaryColor,
       appBar: AppBar(
         toolbarHeight: 52,
         forceMaterialTransparency: true,
-        backgroundColor: const Color(0xFF1E2226),
+        backgroundColor: bgPrimaryColor,
       ),
-      body: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 0, right: 0),
-          child: ListView(
-            children: const [
-              Padding(
-                padding: EdgeInsets.only(left: 16, right: 16),
-                child: DescriptionTest(),
-              ),
-              Divider(
-                color: Color(0xFF373C40),
-                thickness: 8,
-                height: 52,
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 16, right: 16),
-                child: InstructionTest(),
-              ),
-            ],
+      body: ListView(
+        children: const [
+          DescriptionTest(),
+          Divider(
+            color: bgSecondaryColor,
+            thickness: 8,
+            height: 53,
           ),
-        ),
+          InstructionTest(),
+        ],
       ),
       bottomNavigationBar: const BottomBar(),
     );
