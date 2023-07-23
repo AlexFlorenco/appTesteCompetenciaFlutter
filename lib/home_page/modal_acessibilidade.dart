@@ -1,34 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:teste_competencia_flutter/colors/colors.dart';
 
 class ModalAcessibilidade extends StatefulWidget {
-  const ModalAcessibilidade({super.key});
+  const ModalAcessibilidade(
+      {super.key, required this.isEnabled, required this.setAccessibility});
+  final bool isEnabled;
+  final ValueChanged<bool> setAccessibility;
 
   @override
   State<ModalAcessibilidade> createState() => _ModalAcessibilidadeState();
 }
 
 class _ModalAcessibilidadeState extends State<ModalAcessibilidade> {
-  var isEnabled = false;
+  bool isEnabled = false;
+  bool enableButton = false;
+
+  @override
+  void initState() {
+    super.initState();
+    isEnabled = widget.isEnabled;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: const Text(
-                'Modo de Acessibilidade',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                textAlign: TextAlign.start,
-              ),
+          const Padding(
+            padding: EdgeInsets.only(bottom: 12),
+            child: Text(
+              'Modo de Acessibilidade',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(bottom: 14),
+            padding: const EdgeInsets.only(bottom: 17),
             child: Row(
               children: [
                 const Flexible(
@@ -37,52 +45,41 @@ class _ModalAcessibilidadeState extends State<ModalAcessibilidade> {
                     style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
-                        height: 1.25),
+                        height: 1.20),
                   ),
                 ),
-                Switch(
-                    value: isEnabled,
-                    activeColor: const Color(0xFF174A34),
-                    activeTrackColor: const Color(0xFF3FC787),
-                    inactiveThumbColor: const Color(0xFF505050),
-                    inactiveTrackColor: const Color(0xFFD3D2D5),
-                    onChanged: (bool value) {
-                      setState(() {
-                        isEnabled = !isEnabled;
-                      });
-                    })
+                SwitchButton(
+                  isOn: isEnabled,
+                  onChanged: (bool newValue) {
+                    setState(() {
+                      isEnabled = newValue;
+                    });
+                    enableButton = !enableButton;
+                  },
+                ),
               ],
             ),
           ),
           SizedBox(
             width: MediaQuery.of(context).size.width,
-            height: 35,
+            height: 34,
             child: TextButton(
               style: TextButton.styleFrom(
-                foregroundColor: Colors.white,
-              ).copyWith(
-                backgroundColor: MaterialStateProperty.resolveWith(
-                  (states) {
-                    if (states.contains(MaterialState.disabled)) {
-                      return const Color(0xFF393C40);
-                    }
-                    return const Color((0xFF6FB5F8));
-                  },
-                ),
-                foregroundColor: MaterialStateProperty.resolveWith(
-                  (states) {
-                    if (states.contains(MaterialState.disabled)) {
-                      return const Color((0xFF75797E));
-                    }
-                    return const Color((0xFF1D3C5C));
-                  },
-                ),
-              ),
-              onPressed: isEnabled
+                  backgroundColor: enableButton
+                      ? buttonBgPrimaryEnabled
+                      : buttonBgPrimaryDisabled,
+                  foregroundColor: enableButton
+                      ? buttonFgPrimaryEnabled
+                      : buttonFgPrimaryDisabled,
+                  splashFactory: enableButton
+                      ? InkSplash.splashFactory
+                      : NoSplash.splashFactory),
+              onPressed: enableButton
                   ? () {
+                      widget.setAccessibility(isEnabled);
                       Navigator.of(context).pop();
                     }
-                  : null,
+                  : () {},
               child: const Text(
                 'Aplicar',
                 style: TextStyle(
@@ -98,28 +95,22 @@ class _ModalAcessibilidadeState extends State<ModalAcessibilidade> {
   }
 }
 
-class SwitchButton extends StatefulWidget {
-  const SwitchButton({super.key});
+class SwitchButton extends StatelessWidget {
+  final bool isOn;
+  final ValueChanged<bool> onChanged;
 
-  @override
-  State<SwitchButton> createState() => _SwitchButtonState();
-}
-
-class _SwitchButtonState extends State<SwitchButton> {
-  var isEnabled = true;
+  const SwitchButton({Key? key, required this.isOn, required this.onChanged})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Switch(
-        value: isEnabled,
-        activeColor: const Color(0xFF174A34),
-        activeTrackColor: const Color(0xFF3FC787),
-        inactiveThumbColor: const Color(0xFF505050),
-        inactiveTrackColor: const Color(0xFFD3D2D5),
-        onChanged: (bool value) {
-          setState(() {
-            isEnabled = !isEnabled;
-          });
-        });
+      value: isOn,
+      activeColor: const Color(0xFF174A34),
+      activeTrackColor: const Color(0xFF3FC787),
+      inactiveThumbColor: const Color(0xFF505050),
+      inactiveTrackColor: const Color(0xFFD3D2D5),
+      onChanged: onChanged,
+    );
   }
 }

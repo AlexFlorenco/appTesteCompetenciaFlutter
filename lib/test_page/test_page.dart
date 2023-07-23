@@ -7,13 +7,15 @@ import 'package:teste_competencia_flutter/test_page/test_questions.dart';
 import 'countdown_timer.dart';
 
 class TestPage extends StatefulWidget {
-  const TestPage({super.key});
+  const TestPage({super.key, required this.accessibilityIsOn});
+  final bool? accessibilityIsOn;
 
   @override
   State<TestPage> createState() => _TestPageState();
 }
 
 class _TestPageState extends State<TestPage> {
+  bool accessibilityIsOn = false;
   var selectedQuestion = 0;
   int? selectedButton;
   var nextQuestion = false;
@@ -21,6 +23,12 @@ class _TestPageState extends State<TestPage> {
   int? userResponse;
   int correctAnswers = 0;
   final GlobalKey<CountdownTimerState> _timerKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    accessibilityIsOn = widget.accessibilityIsOn!;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +109,7 @@ class _TestPageState extends State<TestPage> {
                 ),
                 CountdownTimer(
                     key: _timerKey,
-                    seconds: 5,
+                    seconds: accessibilityIsOn ? 270 : 90,
                     onFinished: () {
                       if (selectedQuestion < 14) {
                         if (userResponse != null) {

@@ -15,7 +15,9 @@ class TesteCompetencia extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const HomePage(),
-        '/test': (context) => const TestPage(),
+        '/test': (context) => const TestPage(
+              accessibilityIsOn: null,
+            ),
         '/result': (context) => const ResultPage(),
       },
       theme: ThemeData(
