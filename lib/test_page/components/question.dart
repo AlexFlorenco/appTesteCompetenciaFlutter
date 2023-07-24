@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:teste_competencia_flutter/colors/colors.dart';
 
 class Question extends StatelessWidget {
   const Question({super.key, required this.pergunta});
@@ -7,7 +8,7 @@ class Question extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color(0xFF1E2226),
+      color: bgPrimaryColor,
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.fromLTRB(20, 14, 20, 18),
       child: Text(

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:teste_competencia_flutter/colors/colors.dart';
 import 'package:teste_competencia_flutter/components/primary_button.dart';
 
-import 'package:teste_competencia_flutter/test_page/answer.dart';
-import 'package:teste_competencia_flutter/test_page/question.dart';
-import 'package:teste_competencia_flutter/test_page/test_questions.dart';
+import 'package:teste_competencia_flutter/test_page/components/answer.dart';
+import 'package:teste_competencia_flutter/test_page/components/question.dart';
+import 'package:teste_competencia_flutter/test_page/question_db.dart';
 
-import 'countdown_timer.dart';
+import 'components/countdown_timer.dart';
 
 class TestPage extends StatefulWidget {
   const TestPage({super.key, required this.accessibilityIsOn});
@@ -17,14 +18,13 @@ class TestPage extends StatefulWidget {
 
 class _TestPageState extends State<TestPage> {
   bool accessibilityIsOn = false;
-  var selectedQuestion = 0;
-  int? selectedButton;
-  var nextQuestion = false;
-  var numberQuestion = 1;
-  int? userResponse;
+  var currentQuestion = 0;
+  int? selectedAnswer;
+  var enableAdvanceButton = false;
+
+  var questionNumber = 1;
   int correctAnswers = 0;
   final GlobalKey<CountdownTimerState> _timerKey = GlobalKey();
-
   @override
   void initState() {
     super.initState();
@@ -33,151 +33,154 @@ class _TestPageState extends State<TestPage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isAproved;
+
     void avancar() {
       setState(() {
-        selectedQuestion++;
-        selectedButton = null;
+        currentQuestion++;
+        selectedAnswer = null;
       });
     }
 
-    List<String> answersString = teste[selectedQuestion].cast()['answers'];
-
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: textPrimaryColorDark,
       appBar: AppBar(
+        scrolledUnderElevation: 0,
+        backgroundColor: bgPrimaryColor,
         leading: IconButton(
-            icon: const Icon(Icons.close, color: Colors.white),
+            icon: const Icon(
+              Icons.close,
+              color: textPrimaryColor,
+              size: 28,
+            ),
             onPressed: () {
               Navigator.of(context).pop();
             }),
         title: const Text(
           'Avaliação de Flutter',
           style: TextStyle(
-              color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+              color: textPrimaryColor,
+              fontSize: 18,
+              fontWeight: FontWeight.bold),
         ),
         toolbarHeight: 44,
-        forceMaterialTransparency: false,
-        backgroundColor: const Color(0xFF1E2226),
       ),
       body: Column(
         children: [
           Question(
-            pergunta: teste[selectedQuestion]['question'].toString(),
+            pergunta: questionDB[currentQuestion]['question'].toString(),
           ),
-          Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 18),
-                child: IntrinsicHeight(
+          Expanded(
+            child: ListView(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 18),
                   child: Column(
                     children: [
-                      for (int i = 0; i < 4; i++)
+                      for (int i = 0;
+                          i < questionDB[currentQuestion]['answers'].length;
+                          i++) ...[
                         Answer(
-                            content: answersString[i],
+                            content: questionDB[currentQuestion]
+                                .cast()['answers'][i],
                             onClick: () {
                               setState(() {
-                                selectedButton = i;
-                                nextQuestion = true;
+                                selectedAnswer = i;
+                                enableAdvanceButton = true;
                               });
-                              userResponse = i;
                             },
-                            selected: i == selectedButton),
+                            isSelected: i == selectedAnswer),
+                        const SizedBox(
+                          height: 8,
+                        )
+                      ]
                     ],
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
       bottomNavigationBar: BottomAppBar(
         height: 81,
-        surfaceTintColor: const Color(0xFF1E2226),
-        color: const Color(0xFF1E2226),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        surfaceTintColor: bgPrimaryColor,
+        color: bgPrimaryColor,
+        child: Row(
           children: [
-            Row(
-              children: [
-                Text('P$numberQuestion/15'),
-                const SizedBox(
-                  height: 24,
-                  child: VerticalDivider(
-                    color: Color(0xFF303539),
-                    thickness: 1.5,
-                    width: 20,
-                  ),
-                ),
-                CountdownTimer(
-                    key: _timerKey,
-                    seconds: accessibilityIsOn ? 270 : 90,
-                    onFinished: () {
-                      if (selectedQuestion < 14) {
-                        if (userResponse != null) {
-                          if (teste[selectedQuestion].cast()['answers']
-                                  [userResponse] ==
-                              teste[selectedQuestion].cast()['correct']) {
-                            correctAnswers++;
-                            print('Acertou');
-                          } else {
-                            print('Errou');
-                          }
+            Text('P$questionNumber/15'),
+            const SizedBox(
+              height: 24,
+              child: VerticalDivider(
+                color: Color(0xFF303539),
+                thickness: 1.5,
+                width: 20,
+              ),
+            ),
+            CountdownTimer(
+                key: _timerKey,
+                seconds: accessibilityIsOn ? 270 : 90,
+                onFinished: () {
+                  if (currentQuestion < 14) {
+                    if (selectedAnswer != null) {
+                      if (questionDB[currentQuestion].cast()['answers']
+                              [selectedAnswer] ==
+                          questionDB[currentQuestion].cast()['correct']) {
+                        correctAnswers++;
+                        print('Acertou');
+                      } else {
+                        print('Errou');
+                      }
+                    } else {
+                      print('Não respondeu');
+                    }
+                    print('Respostas corretas: $correctAnswers');
+                    avancar();
+                    selectedAnswer = null;
+                    enableAdvanceButton = false;
+                    questionNumber++;
+                    _timerKey.currentState?.reset();
+                  } else if (currentQuestion == 14) {
+                    if (correctAnswers > 10) {
+                      Navigator.pushReplacementNamed(context, '/result',
+                          arguments: true);
+                    } else {
+                      Navigator.pushReplacementNamed(context, '/result',
+                          arguments: false);
+                    }
+                  }
+                }),
+            const Spacer(),
+            PrimaryButton(
+                label: 'Avançar',
+                enableButton: enableAdvanceButton,
+                onPressed: enableAdvanceButton
+                    ? () {
+                        if (questionDB[currentQuestion].cast()['answers']
+                                [selectedAnswer] ==
+                            questionDB[currentQuestion].cast()['correct']) {
+                          correctAnswers++;
+                          print('Acertou');
                         } else {
-                          print('Não respondeu');
+                          print('Errou');
                         }
                         print('Respostas corretas: $correctAnswers');
-                        avancar();
-                        userResponse = null;
-                        nextQuestion = false;
-                        numberQuestion++;
-                        _timerKey.currentState?.reset();
-                      } else if (selectedQuestion == 14) {
-                        if (correctAnswers > 10) {
+
+                        if (currentQuestion == questionDB.length - 1) {
+                          correctAnswers > 0.7 * questionDB.length
+                              ? isAproved = true
+                              : isAproved = false;
                           Navigator.pushReplacementNamed(context, '/result',
-                              arguments: true);
+                              arguments: isAproved);
                         } else {
-                          Navigator.pushReplacementNamed(context, '/result',
-                              arguments: false);
+                          avancar();
+                          selectedAnswer = null;
+                          enableAdvanceButton = false;
+                          questionNumber++;
+                          _timerKey.currentState?.reset();
                         }
                       }
-                    }),
-                const Spacer(),
-                PrimaryButton(
-                    label: 'Avançar',
-                    enableButton: nextQuestion,
-                    onPressed: nextQuestion
-                        ? () {
-                            if (selectedQuestion < 14) {
-                              if (teste[selectedQuestion].cast()['answers']
-                                      [userResponse] ==
-                                  teste[selectedQuestion].cast()['correct']) {
-                                correctAnswers++;
-                                print('Acertou');
-                              } else {
-                                print('Errou');
-                              }
-
-                              print('Respostas corretas: $correctAnswers');
-                              avancar();
-                              userResponse = null;
-                              nextQuestion = false;
-                              numberQuestion++;
-                              _timerKey.currentState?.reset();
-                            } else if (selectedQuestion == 14) {
-                              if (correctAnswers > 10) {
-                                Navigator.pushReplacementNamed(
-                                    context, '/result',
-                                    arguments: true);
-                              } else {
-                                Navigator.pushReplacementNamed(
-                                    context, '/result',
-                                    arguments: false);
-                              }
-                            }
-                          }
-                        : () {})
-              ],
-            ),
+                    : () {})
           ],
         ),
       ),
