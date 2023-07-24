@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:teste_competencia_flutter/colors/colors.dart';
+import 'package:teste_competencia_flutter/components/primary_button.dart';
+
+import '../components/switch_button.dart';
 
 class ModalAcessibilidade extends StatefulWidget {
   const ModalAcessibilidade(
@@ -63,54 +65,19 @@ class _ModalAcessibilidadeState extends State<ModalAcessibilidade> {
           SizedBox(
             width: MediaQuery.of(context).size.width,
             height: 34,
-            child: TextButton(
-              style: TextButton.styleFrom(
-                  backgroundColor: enableButton
-                      ? buttonBgPrimaryEnabled
-                      : buttonBgPrimaryDisabled,
-                  foregroundColor: enableButton
-                      ? buttonFgPrimaryEnabled
-                      : buttonFgPrimaryDisabled,
-                  splashFactory: enableButton
-                      ? InkSplash.splashFactory
-                      : NoSplash.splashFactory),
+            child: PrimaryButton(
+              label: 'Aplicar',
               onPressed: enableButton
                   ? () {
                       widget.setAccessibility(isEnabled);
                       Navigator.of(context).pop();
                     }
                   : () {},
-              child: const Text(
-                'Aplicar',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+              enableButton: enableButton,
             ),
           ),
         ],
       ),
-    );
-  }
-}
-
-class SwitchButton extends StatelessWidget {
-  final bool isOn;
-  final ValueChanged<bool> onChanged;
-
-  const SwitchButton({Key? key, required this.isOn, required this.onChanged})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Switch(
-      value: isOn,
-      activeColor: const Color(0xFF174A34),
-      activeTrackColor: const Color(0xFF3FC787),
-      inactiveThumbColor: const Color(0xFF505050),
-      inactiveTrackColor: const Color(0xFFD3D2D5),
-      onChanged: onChanged,
     );
   }
 }

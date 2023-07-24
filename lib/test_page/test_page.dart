@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:teste_competencia_flutter/components/primary_button.dart';
 
 import 'package:teste_competencia_flutter/test_page/answer.dart';
 import 'package:teste_competencia_flutter/test_page/question.dart';
@@ -141,51 +142,40 @@ class _TestPageState extends State<TestPage> {
                       }
                     }),
                 const Spacer(),
-                TextButton(
-                  style: ButtonStyle(
-                    backgroundColor: nextQuestion
-                        ? const MaterialStatePropertyAll(Color(0xff72B4F7))
-                        : const MaterialStatePropertyAll(Color(0xFF393C40)),
-                  ),
-                  onPressed: nextQuestion
-                      ? () {
-                          if (selectedQuestion < 14) {
-                            if (teste[selectedQuestion].cast()['answers']
-                                    [userResponse] ==
-                                teste[selectedQuestion].cast()['correct']) {
-                              correctAnswers++;
-                              print('Acertou');
-                            } else {
-                              print('Errou');
-                            }
+                PrimaryButton(
+                    label: 'Avançar',
+                    enableButton: nextQuestion,
+                    onPressed: nextQuestion
+                        ? () {
+                            if (selectedQuestion < 14) {
+                              if (teste[selectedQuestion].cast()['answers']
+                                      [userResponse] ==
+                                  teste[selectedQuestion].cast()['correct']) {
+                                correctAnswers++;
+                                print('Acertou');
+                              } else {
+                                print('Errou');
+                              }
 
-                            print('Respostas corretas: $correctAnswers');
-                            avancar();
-                            userResponse = null;
-                            nextQuestion = false;
-                            numberQuestion++;
-                            _timerKey.currentState?.reset();
-                          } else if (selectedQuestion == 14) {
-                            if (correctAnswers > 10) {
-                              Navigator.pushReplacementNamed(context, '/result',
-                                  arguments: true);
-                            } else {
-                              Navigator.pushReplacementNamed(context, '/result',
-                                  arguments: false);
+                              print('Respostas corretas: $correctAnswers');
+                              avancar();
+                              userResponse = null;
+                              nextQuestion = false;
+                              numberQuestion++;
+                              _timerKey.currentState?.reset();
+                            } else if (selectedQuestion == 14) {
+                              if (correctAnswers > 10) {
+                                Navigator.pushReplacementNamed(
+                                    context, '/result',
+                                    arguments: true);
+                              } else {
+                                Navigator.pushReplacementNamed(
+                                    context, '/result',
+                                    arguments: false);
+                              }
                             }
                           }
-                        }
-                      : null,
-                  child: Text(
-                    'Avançar',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                        color: nextQuestion
-                            ? const Color(0xFF1D3C5C)
-                            : const Color(0xFF75797E)),
-                  ),
-                ),
+                        : () {})
               ],
             ),
           ],
