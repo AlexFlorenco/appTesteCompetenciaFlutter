@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+const Color invisibleColor = Color.fromARGB(0, 255, 255, 255);
+
 const Color bgPrimaryColor = Color(0xFF1E2226);
 const Color bgSecondaryColor = Color(0xFF373C40);
 

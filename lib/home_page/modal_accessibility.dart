@@ -3,24 +3,27 @@ import 'package:teste_competencia_flutter/components/primary_button.dart';
 
 import '../components/switch_button.dart';
 
-class ModalAcessibilidade extends StatefulWidget {
-  const ModalAcessibilidade(
-      {super.key, required this.isEnabled, required this.setAccessibility});
-  final bool isEnabled;
-  final ValueChanged<bool> setAccessibility;
+class ModalAccessibility extends StatefulWidget {
+  const ModalAccessibility(
+      {super.key,
+      required this.accessibilityIsOn,
+      required this.setAccessibilityIsOn});
+
+  final bool accessibilityIsOn;
+  final ValueChanged<bool> setAccessibilityIsOn;
 
   @override
-  State<ModalAcessibilidade> createState() => _ModalAcessibilidadeState();
+  State<ModalAccessibility> createState() => _ModalAccessibilityState();
 }
 
-class _ModalAcessibilidadeState extends State<ModalAcessibilidade> {
-  bool isEnabled = false;
-  bool enableButton = false;
+class _ModalAccessibilityState extends State<ModalAccessibility> {
+  bool accessibilityIsOn = false;
+  bool enableActionButton = false;
 
   @override
   void initState() {
     super.initState();
-    isEnabled = widget.isEnabled;
+    accessibilityIsOn = widget.accessibilityIsOn;
   }
 
   @override
@@ -44,19 +47,16 @@ class _ModalAcessibilidadeState extends State<ModalAcessibilidade> {
                 const Flexible(
                   child: Text(
                     'Se precisar de tempo extra em decorrência de alguma deficiência, você terá 4,5 minutos para cada pergunta. Esta escolha é confidencial, não será salva e nem será compartilhada com outras pessoas. Saiba mais',
-                    style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                        height: 1.20),
+                    style: TextStyle(fontSize: 12, height: 1.20),
                   ),
                 ),
                 SwitchButton(
-                  isOn: isEnabled,
+                  isOn: accessibilityIsOn,
                   onChanged: (bool newValue) {
                     setState(() {
-                      isEnabled = newValue;
+                      accessibilityIsOn = newValue;
                     });
-                    enableButton = !enableButton;
+                    enableActionButton = !enableActionButton;
                   },
                 ),
               ],
@@ -67,13 +67,13 @@ class _ModalAcessibilidadeState extends State<ModalAcessibilidade> {
             height: 34,
             child: PrimaryButton(
               label: 'Aplicar',
-              onPressed: enableButton
+              onPressed: enableActionButton
                   ? () {
-                      widget.setAccessibility(isEnabled);
+                      widget.setAccessibilityIsOn(accessibilityIsOn);
                       Navigator.of(context).pop();
                     }
                   : () {},
-              enableButton: enableButton,
+              enableButton: enableActionButton,
             ),
           ),
         ],

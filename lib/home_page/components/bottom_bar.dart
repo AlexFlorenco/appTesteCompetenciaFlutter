@@ -4,7 +4,7 @@ import 'package:teste_competencia_flutter/test_page/test_page.dart';
 import '../../colors/colors.dart';
 import '../../components/primary_button.dart';
 import '../../components/secondary_button.dart';
-import '../modal_acessibilidade.dart';
+import 'modal_builder.dart';
 
 class BottomBar extends StatefulWidget {
   const BottomBar({super.key});
@@ -14,11 +14,11 @@ class BottomBar extends StatefulWidget {
 }
 
 class _BottomBarState extends State<BottomBar> {
-  bool onAccessibility = false;
+  bool accessibilityIsOn = false;
 
-  void setAccessibility(bool newValue) {
+  void setAccessibilityIsOn(bool newValue) {
     setState(() {
-      onAccessibility = newValue;
+      accessibilityIsOn = newValue;
     });
   }
 
@@ -39,69 +39,49 @@ class _BottomBarState extends State<BottomBar> {
               ),
             ),
             child: TextButton(
-              style: const ButtonStyle(
-                padding: MaterialStatePropertyAll(EdgeInsets.zero),
-                shape: MaterialStatePropertyAll(
-                  RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-                ),
-                backgroundColor: MaterialStatePropertyAll(
-                  Color.fromARGB(0, 255, 255, 255),
-                ),
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.zero,
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero),
+                backgroundColor: invisibleColor,
               ),
               onPressed: () {
                 showModalBottomSheet(
                   context: context,
                   builder: ((context) {
-                    return Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(width: 1, color: bgSecondaryColor),
-                          borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              topRight: Radius.circular(10)),
-                          color: bgPrimaryColor),
-                      height: 225,
-                      child: Column(
-                        children: [
-                          Container(
-                            width: 50,
-                            height: 6,
-                            margin: const EdgeInsets.only(top: 12),
-                            decoration: BoxDecoration(
-                              color: textPrimaryColor,
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                          ),
-                          ModalAcessibilidade(
-                            isEnabled: onAccessibility,
-                            setAccessibility: setAccessibility,
-                          ),
-                        ],
-                      ),
+                    return ModalBuilder(
+                      accessibilityIsOn: accessibilityIsOn,
+                      setAccessibilityIsOn: setAccessibilityIsOn,
                     );
                   }),
                 );
               },
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16, right: 3),
-                    child: RichText(
-                      text: TextSpan(
-                        text: 'Modo de acessibilidade: ',
-                        children: [
-                          TextSpan(
-                            text: onAccessibility ? 'ativado' : 'desativado',
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ],
+              child: Padding(
+                padding: const EdgeInsets.only(left: 16, right: 16),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 3),
+                      child: RichText(
+                        text: TextSpan(
+                          text: 'Modo de acessibilidade: ',
+                          children: [
+                            TextSpan(
+                              text:
+                                  accessibilityIsOn ? 'ativado' : 'desativado',
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  const Icon(
-                    Icons.arrow_drop_down,
-                    color: textSecondaryColor,
-                  )
-                ],
+                    const Icon(
+                      Icons.arrow_drop_down,
+                      color: textSecondaryColor,
+                    )
+                  ],
+                ),
               ),
             ),
           ),
@@ -128,7 +108,7 @@ class _BottomBarState extends State<BottomBar> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => TestPage(
-                              accessibilityIsOn: onAccessibility,
+                              accessibilityIsOn: accessibilityIsOn,
                             ),
                           ),
                         ),
