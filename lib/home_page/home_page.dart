@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:teste_competencia_flutter/colors/colors.dart';
 
-import 'bottom_bar.dart';
-import 'description_test.dart';
-import 'instruction_test.dart';
+import 'components/bottom_bar.dart';
+import 'components/description_test.dart';
+import 'components/instruction_test.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:teste_competencia_flutter/test_page/test_page.dart';
-import '../colors/colors.dart';
-import '../components/primary_button.dart';
-import '../components/secondary_button.dart';
-import 'modal_acessibilidade.dart';
+
+import '../../colors/colors.dart';
+import '../../components/primary_button.dart';
+import '../../components/secondary_button.dart';
+import '../modal_acessibilidade.dart';
 
 class BottomBar extends StatefulWidget {
   const BottomBar({super.key});
