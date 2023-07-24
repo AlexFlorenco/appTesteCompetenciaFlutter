@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:teste_competencia_flutter/test_page/test_page.dart';
 import '../colors/colors.dart';
 import '../components/primary_button.dart';
+import '../components/secondary_button.dart';
 import 'modal_acessibilidade.dart';
 
 class BottomBar extends StatefulWidget {
@@ -113,21 +114,8 @@ class _BottomBarState extends State<BottomBar> {
                   height: 33,
                   child: Row(
                     children: [
-                      OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          side: const BorderSide(
-                              width: 1, color: textPrimaryColor),
-                          padding: const EdgeInsets.fromLTRB(13, 0, 13, 0),
-                          foregroundColor: textPrimaryColor,
-                        ),
-                        onPressed: () {},
-                        child: const Text(
-                          'Praticar',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
-                          ),
-                        ),
+                      const SecondaryButton(
+                        label: 'Praticar',
                       ),
                       const SizedBox(
                         width: 10,
@@ -144,27 +132,6 @@ class _BottomBarState extends State<BottomBar> {
                           ),
                         ),
                       ),
-                      // TextButton(
-                      //   style: TextButton.styleFrom(
-                      //       backgroundColor: appSecondaryColor),
-                      //   onPressed: () => Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //       builder: (context) => TestPage(
-                      //         accessibilityIsOn: onAccessibility,
-                      //       ),
-                      //     ),
-                      //   ),
-                      //   // Navigator.of(context, ).pushNamed('/test');
-
-                      //   child: const Text(
-                      //     'Iniciar',
-                      //     style: TextStyle(
-                      //         fontWeight: FontWeight.w500,
-                      //         fontSize: 16,
-                      //         color: textPrimaryColorDark),
-                      //   ),
-                      // ),
                     ],
                   ),
                 ),
