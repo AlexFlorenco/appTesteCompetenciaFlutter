@@ -35,11 +35,33 @@ class _TestPageState extends State<TestPage> {
   Widget build(BuildContext context) {
     bool isAproved;
 
-    void avancar() {
+    void progress() {
       setState(() {
         currentQuestion++;
         selectedAnswer = null;
       });
+    }
+
+    void validateAnswer() {
+      if (selectedAnswer != null &&
+          questionDB[currentQuestion].cast()['answers'][selectedAnswer] ==
+              questionDB[currentQuestion].cast()['correct']) {
+        correctAnswers++;
+      }
+
+      if (currentQuestion == questionDB.length - 1) {
+        correctAnswers > 0.7 * questionDB.length
+            ? isAproved = true
+            : isAproved = false;
+        Navigator.pushReplacementNamed(context, '/result',
+            arguments: isAproved);
+      } else {
+        progress();
+        selectedAnswer = null;
+        enableAdvanceButton = false;
+        questionNumber++;
+        _timerKey.currentState?.reset();
+      }
     }
 
     return Scaffold(
@@ -118,69 +140,15 @@ class _TestPageState extends State<TestPage> {
               ),
             ),
             CountdownTimer(
-                key: _timerKey,
-                seconds: accessibilityIsOn ? 270 : 90,
-                onFinished: () {
-                  if (currentQuestion < 14) {
-                    if (selectedAnswer != null) {
-                      if (questionDB[currentQuestion].cast()['answers']
-                              [selectedAnswer] ==
-                          questionDB[currentQuestion].cast()['correct']) {
-                        correctAnswers++;
-                        print('Acertou');
-                      } else {
-                        print('Errou');
-                      }
-                    } else {
-                      print('Não respondeu');
-                    }
-                    print('Respostas corretas: $correctAnswers');
-                    avancar();
-                    selectedAnswer = null;
-                    enableAdvanceButton = false;
-                    questionNumber++;
-                    _timerKey.currentState?.reset();
-                  } else if (currentQuestion == 14) {
-                    if (correctAnswers > 10) {
-                      Navigator.pushReplacementNamed(context, '/result',
-                          arguments: true);
-                    } else {
-                      Navigator.pushReplacementNamed(context, '/result',
-                          arguments: false);
-                    }
-                  }
-                }),
+              key: _timerKey,
+              seconds: accessibilityIsOn ? 270 : 90,
+              onFinished: validateAnswer,
+            ),
             const Spacer(),
             PrimaryButton(
                 label: 'Avançar',
                 enableButton: enableAdvanceButton,
-                onPressed: enableAdvanceButton
-                    ? () {
-                        if (questionDB[currentQuestion].cast()['answers']
-                                [selectedAnswer] ==
-                            questionDB[currentQuestion].cast()['correct']) {
-                          correctAnswers++;
-                          print('Acertou');
-                        } else {
-                          print('Errou');
-                        }
-                        print('Respostas corretas: $correctAnswers');
-
-                        if (currentQuestion == questionDB.length - 1) {
-                          correctAnswers > 0.7 * questionDB.length
-                              ? isAproved = true
-                              : isAproved = false;
-                          Navigator.pushReplacementNamed(context, '/result',
-                              arguments: isAproved);
-                        } else {
-                          avancar();
-                          selectedAnswer = null;
-                          enableAdvanceButton = false;
-                          questionNumber++;
-                          _timerKey.currentState?.reset();
-                        }
-                      }
-                    : () {})
+                onPressed: enableAdvanceButton ? validateAnswer : () {})
           ],
         ),
       ),
