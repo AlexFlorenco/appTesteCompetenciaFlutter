@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:teste_competencia_flutter/colors/colors.dart';
 import 'package:teste_competencia_flutter/components/primary_button.dart';
+import 'package:teste_competencia_flutter/result_page/components/credits.dart';
 import 'package:teste_competencia_flutter/result_page/components/result_widget.dart';
 
 class ResultPage extends StatelessWidget {
@@ -33,15 +34,29 @@ class ResultPage extends StatelessWidget {
         ),
         toolbarHeight: 44,
       ),
-      body: Container(
-        padding: const EdgeInsets.only(left: 16, right: 16),
-        width: MediaQuery.of(context).size.width,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+      body: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        child: ListView(
           children: [
-            ResultWidget(
-              feedback: isAproved,
-            ),
+            IntrinsicHeight(
+              child: SizedBox(
+                // height: MediaQuery.of(context).size.height,
+                child: Column(
+                  // mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ResultWidget(
+                      feedback: isAproved,
+                    ),
+                    const Divider(
+                      color: bgSecondaryColor,
+                      thickness: 8,
+                      height: 53,
+                    ),
+                    const Credits(),
+                  ],
+                ),
+              ),
+            )
           ],
         ),
       ),
